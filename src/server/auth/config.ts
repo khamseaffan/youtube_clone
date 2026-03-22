@@ -1,6 +1,7 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { type DefaultSession, type NextAuthConfig } from "next-auth";
-import DiscordProvider from "next-auth/providers/discord";
+import Nodemailer from "next-auth/providers/nodemailer";
+
 
 import { db } from "~/server/db";
 
@@ -32,7 +33,11 @@ declare module "next-auth" {
  */
 export const authConfig = {
   providers: [
-    DiscordProvider,
+    Nodemailer({
+      server: process.env.EMAIL_SERVER,
+      from: process.env.EMAIL_FROM
+    }),
+
     /**
      * ...add more providers here.
      *
@@ -53,4 +58,10 @@ export const authConfig = {
       },
     }),
   },
+  theme: {
+    colorScheme: "auto", // "auto" | "dark" | "light"
+    brandColor: "", // Hex color code
+    logo: "", // Absolute URL to image
+    buttonText: "" // Hex color code
+  }
 } satisfies NextAuthConfig;
